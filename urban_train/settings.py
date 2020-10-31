@@ -1,23 +1,18 @@
+# coding: utf-8
 import os
-import environ
+from decouple import config
+from unipath import Path
+import dj_database_url
 
-BASE_DIR = environ.Path(__file__) - 2
-ROOT_DIR = environ.Path(__file__) - 2
+BASE_DIR = Path(__file__).parent
+ROOT_DIR = Path(__file__).ancestor(2)
 
-env = environ.Env()
-env.read_env(ROOT_DIR('.envs/.local/.env'))
-
-SECRET_KEY = env('DJANGO_SECRET_KEY', default='apjfqc9e8r-9eq3r3u49u4399r43-@#%^^^')
-
-APPS_DIR = ROOT_DIR.path("urban-train")
-
-DEBUG = env.bool('DJANGO_DEBUG', False)
+DEBUG = config('DEBUG', default=False, cast=bool)
+SECRET_KEY = config('SECRET_KEY')
 
 ALLOWED_HOSTS = [
-    'gastosluxu.com.br',
     'localhost',
     '127.0.0.1',
-    '172.105.148.155',
     'gastosluxu.herokuapp.com'
 ]
 
@@ -81,25 +76,14 @@ WSGI_APPLICATION = 'urban_train.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(
+    conn_max_age=600,
+    ssl_require=True,
+    default=config('DATABASE_URL')
+)
+DATABASES['default']['ATOMIC_REQUESTS'] = True
 
-# postgres://USER:PASSWORD@HOST:PORT/NAME
-# DATABASES = {
-#     'default': env.db('DATABASE_URL', default='postgres:///promosys'),
-# }
-# DATABASES['default']['ATOMIC_REQUESTS'] = True
-# DATABASES['default']['conn_max_age'] = 600
-
-# If use POSTGRES and AWS
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['RDS_DB_NAME'],
-        'USER': os.environ['RDS_USERNAME'],
-        'PASSWORD': os.environ['RDS_PASSWORD'],
-        'HOST': os.environ['RDS_HOSTNAME'],
-        'PORT': os.environ['RDS_PORT'],
-        }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -128,14 +112,14 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+LOCALE_PATHS = [BASE_DIR, "locale"]
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
-LOCALE_PATHS = [ROOT_DIR.path("locale")]
 
 # STATIC
 STATIC_URL = "/static/"
-STATIC_ROOT = str(ROOT_DIR("staticfiles"))
+STATIC_ROOT = os.path.join(ROOT_DIR, "staticfiles")
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
+    os.path.join(ROOT_DIR, "static")
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
