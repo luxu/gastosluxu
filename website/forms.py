@@ -1,4 +1,3 @@
-# coding=utf-8
 from .models import (
     Segmento, Gasto, Rabbiit, HoraTrabalhada,
     Pecas, Comercio, Itenspecas
@@ -13,7 +12,7 @@ from crispy_forms.layout import (
 from crispy_forms.bootstrap import InlineField, FormActions
 from django_select2.forms import ModelSelect2Widget
 from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.forms.models import inlineformset_factory
 
 class MyDateInput(forms.DateInput):
@@ -46,7 +45,6 @@ class ComercioCustomTitleWidget(ModelSelect2Widget):
         return force_text(obj.description).upper()
 
 class LocalidadeCustomTitleWidget(ModelSelect2Widget):
-    # model = City
     search_fields = [
         'description__icontains'
     ]
@@ -95,7 +93,6 @@ class GastoForm(forms.ModelForm):
 
 
 class SegmentoForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super(SegmentoForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -175,12 +172,6 @@ class RabbiitForm(forms.ModelForm):
 
 
 class HoraTrabalhadaForm(forms.ModelForm):
-    # content = forms.CharField(
-    #     label='Conteúdo',
-    #     widget=SummernoteWidget(
-    #         attrs={'summernote': {'width': '100%', 'height': '400px'}}
-    #     )
-    # )
 
     class Meta:
         model = HoraTrabalhada
@@ -188,13 +179,6 @@ class HoraTrabalhadaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.fields['title'].widget.attrs['class'] = 'uk-input uk-border-rounded'
-        # self.fields['content'].widget.attrs['class'] = 'uk-input uk-border-rounded'
-        # self.fields['cover_image'].widget.attrs['class'] = 'uk-input uk-border-rounded'
-        # self.fields['tags'].widget.attrs['class'] = 'django-select2'
-        # self.fields['tags'].widget.attrs['style'] = 'width: 100%'
-        # self.fields['tags'].required = False
-        # self.fields['published'].widget.attrs['class'] = 'uk-checkbox uk-input uk-border-rounded'
 
 
 class PecasForm(forms.ModelForm):
@@ -230,8 +214,6 @@ class PecasForm(forms.ModelForm):
 
 
 class ItensPecasForm(forms.ModelForm):
-
-    # subtotal = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
     def __init__(self, *args, **kwargs):
         super(ItensPecasForm, self).__init__(*args, **kwargs)

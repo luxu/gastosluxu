@@ -35,12 +35,3 @@ urlpatterns = [
     path('gastosPorSegmento/', GastoSegmentoListView.as_view(), name="gastosPorSegmento"),
     path('gastosPorMes/', gastosPorMesView, name="gastosPorMes"),
 ]
-
-if settings.DEBUG:
-    # This allows the error pages to be debugged during development, just visit
-    # these url in browser to see how these error pages look like.
-    # if "debug_toolbar" in settings.INSTALLED_APPS:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    import debug_toolbar
-
-    urlpatterns += [path("__debug__/", include(debug_toolbar.urls))]

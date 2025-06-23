@@ -1,26 +1,16 @@
-# coding: utf-8
-import os
-from decouple import config
-from unipath import Path
-import dj_database_url
+from pathlib import Path
+from decouple import config, Csv
+from dj_database_url import parse as db_url
 
-BASE_DIR = Path(__file__).parent
-ROOT_DIR = Path(__file__).ancestor(2)
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = config('DEBUG', default=False, cast=bool)
+
 SECRET_KEY = config('SECRET_KEY')
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'gastosluxu.herokuapp.com'
-]
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 INSTALLED_APPS = [
-    # General use templates & template tags (should appear first)
-    'django_adminlte',
-    # Optional: Django admin theme (must be before django.contrib.admin)
-    # 'django_adminlte_theme',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +28,6 @@ INSTALLED_APPS = [
     'dynamic_formsets',
     'cruds_adminlte',
     # 'table',
-    # apps
     'accounts',
     'website'
 ]
@@ -59,7 +48,7 @@ ROOT_URLCONF = 'urban_train.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,19 +63,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'urban_train.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config(
-    conn_max_age=600,
-    ssl_require=True,
-    default=config('DATABASE_URL')
-)
-DATABASES['default']['ATOMIC_REQUESTS'] = True
+default_db_url = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
+DATABASES = {"default": config("DATABASE_URL", default=default_db_url, cast=db_url)}
 
-
-# Password validation
-# https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -103,37 +82,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.10/topics/i18n/
-
 LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-LOCALE_PATHS = [BASE_DIR, "locale"]
-# https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
 
-# STATIC
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(ROOT_DIR, "staticfiles")
-STATICFILES_DIRS = [
-    os.path.join(ROOT_DIR, "static")
-]
-
-# https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = "/django-summernote/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# auth
 LOGIN_URL = '/entrar/'
 AUTH_USER_MODEL = 'accounts.User'
 AUTHENTICATION_BACKENDS = (
@@ -142,28 +105,12 @@ AUTHENTICATION_BACKENDS = (
 )
 
 INTERNAL_IPS = [
-    # ...
     '127.0.0.1',
-    # ...
 ]
 
-# CACHES
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#caches
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "",
-    }
-}
-
-# MEDIA_URL = "/django-summernote/"
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
-
-SUMMERNOTE_CONFIG = {
-    'summernote': {
-        # As an example, using Summernote Air-mode
-        'airMode': False,
-        'lang': 'pt-BR',
     }
 }

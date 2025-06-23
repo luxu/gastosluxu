@@ -1,84 +1,47 @@
-# Urban Train
+# Expense Management System
 
 Sistema de Gerenciamento de gastos
 
-# Instalação
-Recomenda-se criar uma virtualenv para evitar conflitos de versões das bibliotecas instaladas no seu computador
-> virtualenv .venv
+## Criar a virtualenv
+```code
+python -m venv .venv
+OU
+python3 -m venv .venv
+``` 
 
-Para acessar
-- *Windows*:
-> virtualenv .venv\Scripts\activate
-- *Linux*:
-> source .venv\bin\activate
-
-Instalar as bibliotecas:
-- *Windows*:
-  > pip install -r requirements.txt
-- *Linux*:
-  - ATENÇÃO: no linux por padrão vem instalado a versão 2.7 do python,
-   mas precisamos da versão 3.6+ então instale-a e rode:
-  > pip3 install -r requirements.txt
-
-Crie 2 pastas, na raiz do projeto, para guardar infos sigilosas:
-- *.envs* e dentro *.local*
-
-Depois dentro da pasta .local crie o arquivo *.env* com o seguinte conteúdo:
-```
-DEBUG=True
-APPEND_SLASH=False
-
-DJANGO_SECRET_KEY='apjfqc9e8r-9eq3r3u49u4399r43-@#%^^^'
-DJANGO_ALLOWED_HOSTS=localhost
-
-#-------------------DATASBASE-------------------------
-DATABASE_URL=postgres://<USER>:<PASSWORD>@localhost:5432/<DATABASE>
-SQLITE_URL=sqlite:///db.sqlite3
-
-RDS_DB_NAME=
-RDS_USERNAME=
-RDS_PASSWORD=
-RDS_HOSTNAME=
-RDS_PORT=5432
-
-# AWS Settings
-DJANGO_AWS_ACCESS_KEY_ID=
-DJANGO_AWS_SECRET_ACCESS_KEY=
-DJANGO_AWS_STORAGE_BUCKET_NAME=
-
-# Used with email
-DJANGO_MAILGUN_API_KEY=
-DJANGO_SERVER_EMAIL=
-MAILGUN_SENDER_DOMAIN=
-
-# Security! Better to use DNS for this task, but you can use redirect
-DJANGO_SECURE_SSL_REDIRECT=False
-
-# django-allauth
-DJANGO_ACCOUNT_ALLOW_REGISTRATION=False
+## Acessar a virtualenv
+```code
+.venv\Scripts\activate
+OU
+source .venv\bin\activate
 ```
 
-Criar o banco e as tabelas:
-- *Windows*:
-  > python manage.py migrate
-- *Linux*:
-  > python3 manage.py migrate
+## Instalar as libs:
+```code
+pip install -r requirements.txt
+```
 
-Às vezes pode acontecer bugs e precisamos rodar o migrate para cada app, assim:
-> python manage.py makemigrations accounts  
+## Criar o file .env
+```bash
+python contrib/env_gen.py
+```
 
-> python manage.py makemigrations website
+## Rode as migrations
+```bash
+  python manage.py migrate
+```
 
-> python manage.py migrate
+## Criar um superuser
+```bash
+  python manage.py createsuperuser
+```
 
-Criar o usuário para poder logar no app:
+## Rodar o app
+```bash
+  python manage.py runserver
+```
 
-- *Windows*:
-  > python manage.py createsuperuser
-- *Linux*:
-  > python3 manage.py createsuperuser
-
-Será criado o **user** principal do sistema
+### Será criado o **user** principal do sistema
 
 Como início de sua aplicação são esses os passos.
 
